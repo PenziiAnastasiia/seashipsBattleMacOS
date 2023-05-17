@@ -88,11 +88,11 @@
 		1B4A78E729AFEDF200F4BA72 = {
 			isa = PBXGroup;
 			children = (
-				1BFAEE1A2A154E1F007A35D6 /* Seaships Battle */,
-				1B4CD9502A154CC3006CCFE5 /* GameProcessScreenViewController */,
 				1B01201329D3521900281A15 /* Libs */,
 				1B01201029D3517000281A15 /* StartScreenViewController */,
 				1B01200F29D3511900281A15 /* EditingScreenViewController */,
+				1B4CD9502A154CC3006CCFE5 /* GameProcessScreenViewController */,
+				1BFAEE1A2A154E1F007A35D6 /* Seaships Battle */,
 				1B4A78F129AFEDF200F4BA72 /* Products */,
 			);
 			sourceTree = "<group>";

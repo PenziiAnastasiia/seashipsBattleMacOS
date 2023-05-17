@@ -1,10 +1,3 @@
-//
-//  Array+Extension.swift
-//  Seaships Battle
-//
-//  Created by Анастасія Пензій on 17.05.2023.
-//
-
 import Foundation
 
 extension Array where Element: Equatable {
