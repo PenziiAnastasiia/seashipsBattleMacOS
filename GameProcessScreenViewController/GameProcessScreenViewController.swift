@@ -69,22 +69,25 @@ class GameProcessScreenViewController: NSViewController, NSCollectionViewDataSou
     
     private func selectModel(at indexPath: IndexPath) {
         var model = self.enemyCellModels[indexPath.section][indexPath.item]
-        model.type = .miss
-        (0...9).forEach { i in
-            if self.enemyShipsArray[i].contains(where: { point in
-                point == indexPath
-            }) {
-                self.enemy[i].append(indexPath)
-                model.type = .full(.damaged)
-                if self.enemy[i].count == self.enemyShipsArray[i].count {
-                    model.type = .full(.destroyed)
-                    self.enemy[i].forEach { point in
-                        self.enemyCellModels[point.section][point.item].type = .full(.destroyed)
+        if model.type == .empty {
+            model.type = .miss
+            (0...9).forEach { i in
+                if self.enemyShipsArray[i].contains(where: { point in
+                    point == indexPath
+                }) {
+                    self.enemy[i].append(indexPath)
+                    model.type = .full(.damaged)
+                    if self.enemy[i].count == self.enemyShipsArray[i].count {
+                        model.type = .full(.destroyed)
+                        self.enemy[i].forEach { point in
+                            self.enemyCellModels[point.section][point.item].type = .full(.destroyed)
+                        }
                     }
                 }
             }
+            self.enemyCellModels[indexPath.section][indexPath.item] = model
         }
-        self.enemyCellModels[indexPath.section][indexPath.item] = model
+        
 //        self.enemyShipsArray.forEach { ship in
 //            if let index = ship.firstIndex(of: indexPath) {
 //                self.enemy[index].append(indexPath)
