@@ -2,10 +2,6 @@ import Cocoa
 
 class EditingScreenViewController: NSViewController, NSCollectionViewDataSource, NSCollectionViewDelegate {
     
-    struct Config {
-        static let poligonCellIdentifier = NSUserInterfaceItemIdentifier(rawValue: "PoligonCell")
-    }
-
     //MARK:
     //MARK: - Properties
     
@@ -18,9 +14,6 @@ class EditingScreenViewController: NSViewController, NSCollectionViewDataSource,
     private var cellModels: [[CellModel]] = []
     private var lockedPoints: [IndexPath] = []
     private var mySelectPoints: [IndexPath] = []
-    
-    private var myShipsArray: [[IndexPath]] = []
-    private var enemyShipsArray: [[IndexPath]] = []
     
     //MARK:
     //MARK: - Override
@@ -39,16 +32,26 @@ class EditingScreenViewController: NSViewController, NSCollectionViewDataSource,
     //MARK:
     //MARK: - Actions
     
-    @IBAction func menuListAction(_ sender: NSButton) {
-    }
-    
     @IBAction func playAction(_ sender: NSButton) {
-        self.createMyShips()
-        self.enemyShipsArray = self.shipsBuilder.createShips()    }
+//        let enemyShips = self.shipsBuilder.createShips().compactMap { ship in
+//            ShipModel(decks: ship)
+//        }
+//        let myShips = self.createMyShips().compactMap { ship in
+//            ShipModel(decks: ship)
+//        }
+//
+//        self.view.window?.contentViewController = GameProcessScreenViewController.createController(myShips: myShips, enemyShips: enemyShips)
+//    }
+        let enemyShips = self.shipsBuilder.createShips()
+        let myShips = self.createMyShips()
+        
+        self.view.window?.contentViewController = GameProcessScreenViewController.createController(myShips: myShips, enemyShips: enemyShips)
+        }
     
     @IBAction func clearAction(_ sender: Any) {
         self.lockedPoints = []
         self.mySelectPoints = []
+        
         self.generateItems()
         self.rootView.collection.reloadData()
     }
@@ -75,8 +78,38 @@ class EditingScreenViewController: NSViewController, NSCollectionViewDataSource,
         }
     }
     
-    private func createMyShips() {
-        let array = self.mySelectPoints.sorted { first, second in
+    private func createMyShips() -> [[IndexPath]] {
+        var array = self.sortMyPoints()
+        var myShips: [[IndexPath]] = []
+        for _ in (0...9) {
+            if array.isEmpty || array[0].isEmpty {
+                break
+            }
+            var currentShip: [IndexPath] = []
+            array.object(at: 0).do { section in
+                section.object(at: 0).do { point in
+                    currentShip.append(point)
+                    array[0].remove(object: point)
+                }
+            }
+            
+            if let section = array.object(at: 0), section.isEmpty {
+                array.remove(at: 0)
+                self.searchVerticalShip(startIndex: 0, array: &array, currentShip: &currentShip)
+            } else if let section = array.object(at: 0), section[0] == currentShip.last!.add(item: 1) {
+                self.searchHorisontalShip(array: &array, currentShip: &currentShip)
+            } else {
+                self.searchVerticalShip(startIndex: 1, array: &array, currentShip: &currentShip)
+            }
+            myShips.append(currentShip)
+        }
+        myShips.sort { $0.count > $1.count }
+        
+        return myShips
+    }
+    
+    private func sortMyPoints() -> [[IndexPath]] {
+        return self.mySelectPoints.sorted { first, second in
             first.section < second.section
         }.reduce([[IndexPath]]()) { result, indexPath in
             var array = result
@@ -95,13 +128,48 @@ class EditingScreenViewController: NSViewController, NSCollectionViewDataSource,
             
             return array
         }
-        print(array)
+    }
+    
+    private func searchHorisontalShip(array: inout [[IndexPath]], currentShip: inout [IndexPath]) {
+        for _ in (0...3) {
+            if !array.isEmpty && array[0][0] == currentShip.last!.add(item: 1) {
+                currentShip.append(array[0][0])
+                array[0].remove(object: array[0][0])
+                if array[0].isEmpty {
+                    array.remove(at: 0)
+                }
+            } else {
+                break
+            }
+        }
+    }
+    
+    private func searchVerticalShip(startIndex: Int, array: inout [[IndexPath]], currentShip: inout [IndexPath]) {
+        var j = 0
+        for i in (startIndex...3) {
+            if !array.isEmpty,
+               let section = array.object(at: i+j),
+               let point = currentShip.last,
+               section.contains(point.add(section: 1))
+            {
+                if let indexElement = section.firstIndex(of: point.add(section: 1)) {
+                    currentShip.append(point.add(section: 1))
+                    array[i+j].remove(at: indexElement)
+                    if array[i+j].isEmpty {
+                        array.remove(at: i+j)
+                        j -= 1
+                    }
+                }
+            } else {
+                break
+            }
+        }
     }
     
     private func didSelectModel(at indexPath: IndexPath) -> CellModel.CellType {
         var model = self.cellModels[indexPath.section][indexPath.item]
         if model.type == .empty {
-            model.type = .full(.damaged)
+            model.type = .full(.default)
         } else {
             model.type = .empty
         }
@@ -115,7 +183,7 @@ class EditingScreenViewController: NSViewController, NSCollectionViewDataSource,
         
         array += self.aslantLocking(at: index)
         
-        if modelType == .full(.damaged) {
+        if modelType == .full(.default) {
             self.lockedPoints += array
             self.mySelectPoints += [IndexPath.init(item: index.item, section: index.section)]
         } else {
@@ -128,7 +196,7 @@ class EditingScreenViewController: NSViewController, NSCollectionViewDataSource,
                 self.mySelectPoints.remove(at: selectIndex)
             }
         }
-    
+        
         self.didLockedModels(at: array)
     }
     
@@ -216,5 +284,6 @@ class EditingScreenViewController: NSViewController, NSCollectionViewDataSource,
             }
         }
     }
-    
+        
 }
+

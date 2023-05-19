@@ -21,6 +21,11 @@
 		1BFAEE202A154E1F007A35D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1BFAEE1C2A154E1F007A35D6 /* Assets.xcassets */; };
 		1BFAEE212A154E1F007A35D6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1BFAEE1D2A154E1F007A35D6 /* Main.storyboard */; };
 		1BFAEE222A154E1F007A35D6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFAEE1F2A154E1F007A35D6 /* AppDelegate.swift */; };
+		1BFAEE262A15572A007A35D6 /* NSColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFAEE252A15572A007A35D6 /* NSColor+Extension.swift */; };
+		1BFAEE292A155EAC007A35D6 /* GameProcessScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFAEE272A155EAC007A35D6 /* GameProcessScreenViewController.swift */; };
+		1BFAEE2C2A155FA1007A35D6 /* GameProcessScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFAEE2B2A155FA1007A35D6 /* GameProcessScreenView.swift */; };
+		1BFAEE2E2A1789BD007A35D6 /* Optional+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFAEE2D2A1789BD007A35D6 /* Optional+Extension.swift */; };
+		1BFAEE302A17C800007A35D6 /* ShipModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFAEE2F2A17C800007A35D6 /* ShipModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +45,11 @@
 		1BFAEE1C2A154E1F007A35D6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1BFAEE1E2A154E1F007A35D6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1BFAEE1F2A154E1F007A35D6 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		1BFAEE252A15572A007A35D6 /* NSColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSColor+Extension.swift"; sourceTree = "<group>"; };
+		1BFAEE272A155EAC007A35D6 /* GameProcessScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameProcessScreenViewController.swift; sourceTree = "<group>"; };
+		1BFAEE2B2A155FA1007A35D6 /* GameProcessScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameProcessScreenView.swift; sourceTree = "<group>"; };
+		1BFAEE2D2A1789BD007A35D6 /* Optional+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Extension.swift"; sourceTree = "<group>"; };
+		1BFAEE2F2A17C800007A35D6 /* ShipModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,9 +67,10 @@
 			isa = PBXGroup;
 			children = (
 				1B4A793D29B3E2AD00F4BA72 /* EditingScreenViewController.swift */,
-				1B4CD9472A13CEE0006CCFE5 /* ShipsBuilder.swift */,
-				1B4CD94D2A151EF7006CCFE5 /* BoardGenerator.swift */,
 				1B01201129D351BE00281A15 /* EditingScreenView.swift */,
+				1B4CD94D2A151EF7006CCFE5 /* BoardGenerator.swift */,
+				1B4CD9472A13CEE0006CCFE5 /* ShipsBuilder.swift */,
+				1BFAEE2F2A17C800007A35D6 /* ShipModel.swift */,
 				1B01201629D3556A00281A15 /* CellModel.swift */,
 				1B01201829D35DD700281A15 /* PoligonCell.swift */,
 				1B01201929D35DD700281A15 /* PoligonCell.xib */,
@@ -79,6 +90,8 @@
 			isa = PBXGroup;
 			children = (
 				1B01201429D3525900281A15 /* NSBezierPath+Extension.swift */,
+				1BFAEE252A15572A007A35D6 /* NSColor+Extension.swift */,
+				1BFAEE2D2A1789BD007A35D6 /* Optional+Extension.swift */,
 				1B4CD94B2A151ED4006CCFE5 /* Array+Extension.swift */,
 				1B4CD9492A13F8DB006CCFE5 /* IndexPath+Extension.swift */,
 			);
@@ -108,6 +121,8 @@
 		1B4CD9502A154CC3006CCFE5 /* GameProcessScreenViewController */ = {
 			isa = PBXGroup;
 			children = (
+				1BFAEE272A155EAC007A35D6 /* GameProcessScreenViewController.swift */,
+				1BFAEE2B2A155FA1007A35D6 /* GameProcessScreenView.swift */,
 			);
 			path = GameProcessScreenViewController;
 			sourceTree = "<group>";
@@ -194,10 +209,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BFAEE2C2A155FA1007A35D6 /* GameProcessScreenView.swift in Sources */,
 				1BFAEE222A154E1F007A35D6 /* AppDelegate.swift in Sources */,
 				1B01201A29D35DD700281A15 /* PoligonCell.swift in Sources */,
+				1BFAEE292A155EAC007A35D6 /* GameProcessScreenViewController.swift in Sources */,
+				1BFAEE262A15572A007A35D6 /* NSColor+Extension.swift in Sources */,
 				1B4CD94C2A151ED4006CCFE5 /* Array+Extension.swift in Sources */,
 				1B4A78F629AFEDF200F4BA72 /* StartScreenViewController.swift in Sources */,
+				1BFAEE2E2A1789BD007A35D6 /* Optional+Extension.swift in Sources */,
 				1B4CD94A2A13F8DB006CCFE5 /* IndexPath+Extension.swift in Sources */,
 				1B01201529D3525900281A15 /* NSBezierPath+Extension.swift in Sources */,
 				1B4CD9482A13CEE0006CCFE5 /* ShipsBuilder.swift in Sources */,
@@ -205,6 +224,7 @@
 				1B4CD94E2A151EF7006CCFE5 /* BoardGenerator.swift in Sources */,
 				1B4A793E29B3E2AD00F4BA72 /* EditingScreenViewController.swift in Sources */,
 				1B01201729D3556A00281A15 /* CellModel.swift in Sources */,
+				1BFAEE302A17C800007A35D6 /* ShipModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

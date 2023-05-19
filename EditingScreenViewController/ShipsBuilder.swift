@@ -27,7 +27,7 @@ class ShipsBuilder {
     }
     
     private var mainArray: [IndexPath]
-    private var deckShipsArray: [IndexPath]
+    var deckShipsArray: [IndexPath]
     private var shipsArray: [[IndexPath]]
     
     init() {
@@ -37,6 +37,10 @@ class ShipsBuilder {
     }
     
     public func createShips() -> [[IndexPath]] {
+        self.mainArray = BoardGenerator.generate
+        self.deckShipsArray = []
+        self.shipsArray = []
+        
         ShipLength.all.forEach { shipLength in
             self.createDecks(length: shipLength)
         }

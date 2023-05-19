@@ -1,10 +1,3 @@
-//
-//  EditingScreenView.swift
-//  Seaships Battle
-//
-//  Created by Анастасія Пензій on 28.03.2023.
-//
-
 import Cocoa
 
 class EditingScreenView: NSView {
@@ -12,8 +5,6 @@ class EditingScreenView: NSView {
     @IBOutlet weak var timerLabel: NSTextField!
     @IBOutlet weak var conteiner: NSView!
     @IBOutlet weak var collection: NSCollectionView!
-    
-    let controller = EditingScreenViewController.self
     
     var editingTime: Timer?
     var seconds = 180 {

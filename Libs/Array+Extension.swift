@@ -1,8 +1,9 @@
 import Foundation
 
 extension Array where Element: Equatable {
-    mutating func remove(object: Element) {
-        _ = self.firstIndex(of: object)
+    @discardableResult
+    mutating func remove(object: Element) -> Element? {
+        self.firstIndex(of: object)
             .map { index in
                 self.remove(at: index)
             }
