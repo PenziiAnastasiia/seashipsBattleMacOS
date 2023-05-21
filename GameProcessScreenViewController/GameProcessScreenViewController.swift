@@ -15,7 +15,7 @@ class GameProcessScreenViewController: NSViewController, NSCollectionViewDataSou
     
     private var myShipsArray = [[IndexPath]]()
     private var enemyShipsArray = [[IndexPath]]()
-    private var enemy: [[IndexPath]] = [[], [], [], [], [], [], [], [], [], []]
+    private var enemy: [Int : [IndexPath]] = [:]
     
     static func createController(myShips: [[IndexPath]], enemyShips: [[IndexPath]]) -> NSViewController? {
         let storyBoard = NSStoryboard(name: "Main", bundle: nil)
@@ -45,6 +45,12 @@ class GameProcessScreenViewController: NSViewController, NSCollectionViewDataSou
             .forEach { collection in
                 self.configure(collection: collection)
             }
+
+        _ = self.myShipsArray.compactMap { ship in
+            ship.compactMap { point in
+                self.myCellModels[point.section][point.item].type = .full(.default)
+            }
+        }
     }
     
     private func configure(collection: NSCollectionView?) {
@@ -69,64 +75,35 @@ class GameProcessScreenViewController: NSViewController, NSCollectionViewDataSou
     
     private func selectModel(at indexPath: IndexPath) {
         var model = self.enemyCellModels[indexPath.section][indexPath.item]
-        if model.type == .empty {
-            model.type = .miss
-            (0...9).forEach { i in
-                if self.enemyShipsArray[i].contains(where: { point in
-                    point == indexPath
-                }) {
-                    self.enemy[i].append(indexPath)
-                    model.type = .full(.damaged)
-                    if self.enemy[i].count == self.enemyShipsArray[i].count {
-                        model.type = .full(.destroyed)
-                        self.enemy[i].forEach { point in
-                            self.enemyCellModels[point.section][point.item].type = .full(.destroyed)
+        guard model.type == .empty else { return }
+        
+        model.type = .miss
+        self.enemyShipsArray.enumerated().forEach { (i, ship) in
+            if ship.contains(indexPath) {
+                if self.enemy[i] == nil {
+                    self.enemy[i] = [indexPath]
+                } else {
+                    self.enemy[i]?.append(indexPath)
+                }
+                model.type = .full(.damaged)
+                if self.enemy[i]?.count == self.enemyShipsArray[i].count {
+                    model.type = .full(.destroyed)
+                    self.enemy[i]?.forEach { point in
+                        self.enemyCellModels[point.section][point.item].type = .full(.destroyed)
+                    }
+                    var safeZone = SafeZoneBuilder.createSafeZone(around: ship, state: .vertical)
+                    if ship.count > 1 {
+                        if ship[0].add(item: 1) == ship[1] {
+                            safeZone = SafeZoneBuilder.createSafeZone(around: ship, state: .horisontal)
                         }
+                    }
+                    safeZone.forEach { point in
+                        self.enemyCellModels[point.section][point.item].type = .miss
                     }
                 }
             }
-            self.enemyCellModels[indexPath.section][indexPath.item] = model
         }
-        
-//        self.enemyShipsArray.forEach { ship in
-//            if let index = ship.firstIndex(of: indexPath) {
-//                self.enemy[index].append(indexPath)
-//                if self.enemy[index].count != self.enemyShipsArray[index].count {
-//                    model.type = .full(.damaged)
-//                } else {
-//                    model.type = .full(.destroyed)
-//                    self.enemy[index].forEach { point in
-//                        self.enemyCellModels[point.section][point.item].type = .full(.destroyed)
-//                    }
-//                }
-//            }
-//        }
-//        self.enemyCellModels[indexPath.section][indexPath.item] = model
-        
-        
-//        var maybeShip = self.enemyShips.first { ship in
-//            ship.decks.contains { deck in
-//                deck.point == indexPath
-//            }
-//        }
-//        if let ship = maybeShip {
-//            if let index = ship.decks.firstIndex(where: { deck in deck.point == indexPath }) {
-//                var d = maybeShip?.decks.remove(at: index)
-//                d?.isDestroyed = true
-//                d.do { maybeShip?.decks.append($0) }
-//            }
-//
-//        }
-        
-//            if !ship.isDestroyed {
-//                model.type = .full(.damaged)
-//            } else if ship.isDestroyed {
-//                model.type = .full(.destroyed)
-//            }
-//
-//        self.cellModels[indexPath.section][indexPath.item] = model
-//
-//        return model.type
+        self.enemyCellModels[indexPath.section][indexPath.item] = model
     }
  
     //MARK:

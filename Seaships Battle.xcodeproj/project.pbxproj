@@ -26,6 +26,7 @@
 		1BFAEE2C2A155FA1007A35D6 /* GameProcessScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFAEE2B2A155FA1007A35D6 /* GameProcessScreenView.swift */; };
 		1BFAEE2E2A1789BD007A35D6 /* Optional+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFAEE2D2A1789BD007A35D6 /* Optional+Extension.swift */; };
 		1BFAEE302A17C800007A35D6 /* ShipModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFAEE2F2A17C800007A35D6 /* ShipModel.swift */; };
+		1BFAEE322A1A8133007A35D6 /* SafeZoneBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFAEE312A1A8133007A35D6 /* SafeZoneBuilder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,7 @@
 		1BFAEE2B2A155FA1007A35D6 /* GameProcessScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameProcessScreenView.swift; sourceTree = "<group>"; };
 		1BFAEE2D2A1789BD007A35D6 /* Optional+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Extension.swift"; sourceTree = "<group>"; };
 		1BFAEE2F2A17C800007A35D6 /* ShipModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipModel.swift; sourceTree = "<group>"; };
+		1BFAEE312A1A8133007A35D6 /* SafeZoneBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafeZoneBuilder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +69,7 @@
 			isa = PBXGroup;
 			children = (
 				1B4A793D29B3E2AD00F4BA72 /* EditingScreenViewController.swift */,
+				1BFAEE312A1A8133007A35D6 /* SafeZoneBuilder.swift */,
 				1B01201129D351BE00281A15 /* EditingScreenView.swift */,
 				1B4CD94D2A151EF7006CCFE5 /* BoardGenerator.swift */,
 				1B4CD9472A13CEE0006CCFE5 /* ShipsBuilder.swift */,
@@ -222,6 +225,7 @@
 				1B4CD9482A13CEE0006CCFE5 /* ShipsBuilder.swift in Sources */,
 				1B01201229D351BE00281A15 /* EditingScreenView.swift in Sources */,
 				1B4CD94E2A151EF7006CCFE5 /* BoardGenerator.swift in Sources */,
+				1BFAEE322A1A8133007A35D6 /* SafeZoneBuilder.swift in Sources */,
 				1B4A793E29B3E2AD00F4BA72 /* EditingScreenViewController.swift in Sources */,
 				1B01201729D3556A00281A15 /* CellModel.swift in Sources */,
 				1BFAEE302A17C800007A35D6 /* ShipModel.swift in Sources */,

@@ -1,19 +1,20 @@
 import Foundation
 
-class ShipsBuilder {
-    enum ShipState: Int {
-        case horisontal
-        case vertical
-        
-        var change: ShipState {
-            switch self {
-            case .horisontal:
-                return .vertical
-            case .vertical:
-                return .horisontal
-            }
+enum ShipState: Int {
+    case horisontal
+    case vertical
+    
+    var change: ShipState {
+        switch self {
+        case .horisontal:
+            return .vertical
+        case .vertical:
+            return .horisontal
         }
     }
+}
+
+class ShipsBuilder {
     
     enum ShipLength: Int {
         case one
@@ -68,7 +69,8 @@ class ShipsBuilder {
         ship.forEach { shipElement in
             self.mainArray.remove(object: shipElement)
         }
-        self.createSafeZone(around: ship, state: state)
+        let safeZone = SafeZoneBuilder.createSafeZone(around: ship, state: state)
+        self.removeFromMainArray(zone: safeZone)
     }
     
     private func shipState() -> ShipState {
@@ -120,35 +122,7 @@ class ShipsBuilder {
         return self.check(point: endPoint)
     }
     
-    private func createSafeZone(around ship: [IndexPath], state: ShipState) {
-        guard let first = ship.first, let last = ship.last else { return }
-        switch state {
-        case .horisontal:
-            self.fillingMainArray(zone: first.aslantElements)
-            self.fillingMainArray(zone: last.aslantElements)
-            self.fillingMainArray(zone: self.verticalZone(point: first))
-            self.fillingMainArray(zone: self.verticalZone(point: last))
-            self.fillingMainArray(zone: [first.add(item: -1)])
-            self.fillingMainArray(zone: [last.add(item: 1)])
-        case .vertical:
-            self.fillingMainArray(zone: first.aslantElements)
-            self.fillingMainArray(zone: last.aslantElements)
-            self.fillingMainArray(zone: self.horizontalZone(point: first))
-            self.fillingMainArray(zone: self.horizontalZone(point: last))
-            self.fillingMainArray(zone: [first.add(section: -1)])
-            self.fillingMainArray(zone: [last.add(section: 1)])
-        }
-    }
-    
-    private func verticalZone(point: IndexPath) -> [IndexPath] {
-        return [point.add(section: -1), point.add(section: 1)]
-    }
-    
-    private func horizontalZone(point: IndexPath) -> [IndexPath] {
-        return [point.add(item: -1), point.add(item: 1)]
-    }
-    
-    private func fillingMainArray(zone: [IndexPath]) {
+    private func removeFromMainArray(zone: [IndexPath]) {
         zone.forEach { i in
             if self.mainArray.contains(i) {
                 self.mainArray.remove(object: i)
