@@ -27,6 +27,7 @@
 		1BFAEE2E2A1789BD007A35D6 /* Optional+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFAEE2D2A1789BD007A35D6 /* Optional+Extension.swift */; };
 		1BFAEE302A17C800007A35D6 /* ShipModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFAEE2F2A17C800007A35D6 /* ShipModel.swift */; };
 		1BFAEE322A1A8133007A35D6 /* SafeZoneBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFAEE312A1A8133007A35D6 /* SafeZoneBuilder.swift */; };
+		1BFAEE342A1AA792007A35D6 /* NSAlert+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFAEE332A1AA792007A35D6 /* NSAlert+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,7 @@
 		1BFAEE2D2A1789BD007A35D6 /* Optional+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Extension.swift"; sourceTree = "<group>"; };
 		1BFAEE2F2A17C800007A35D6 /* ShipModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipModel.swift; sourceTree = "<group>"; };
 		1BFAEE312A1A8133007A35D6 /* SafeZoneBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafeZoneBuilder.swift; sourceTree = "<group>"; };
+		1BFAEE332A1AA792007A35D6 /* NSAlert+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAlert+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +97,7 @@
 				1B01201429D3525900281A15 /* NSBezierPath+Extension.swift */,
 				1BFAEE252A15572A007A35D6 /* NSColor+Extension.swift */,
 				1BFAEE2D2A1789BD007A35D6 /* Optional+Extension.swift */,
+				1BFAEE332A1AA792007A35D6 /* NSAlert+Extension.swift */,
 				1B4CD94B2A151ED4006CCFE5 /* Array+Extension.swift */,
 				1B4CD9492A13F8DB006CCFE5 /* IndexPath+Extension.swift */,
 			);
@@ -217,6 +220,7 @@
 				1B01201A29D35DD700281A15 /* PoligonCell.swift in Sources */,
 				1BFAEE292A155EAC007A35D6 /* GameProcessScreenViewController.swift in Sources */,
 				1BFAEE262A15572A007A35D6 /* NSColor+Extension.swift in Sources */,
+				1BFAEE342A1AA792007A35D6 /* NSAlert+Extension.swift in Sources */,
 				1B4CD94C2A151ED4006CCFE5 /* Array+Extension.swift in Sources */,
 				1B4A78F629AFEDF200F4BA72 /* StartScreenViewController.swift in Sources */,
 				1BFAEE2E2A1789BD007A35D6 /* Optional+Extension.swift in Sources */,

@@ -2,35 +2,14 @@ import Cocoa
 
 class EditingScreenView: NSView {
 
-    @IBOutlet weak var timerLabel: NSTextField!
     @IBOutlet weak var conteiner: NSView!
     @IBOutlet weak var collection: NSCollectionView!
-    
-    var editingTime: Timer?
-    var seconds = 180 {
-        didSet {
-            if seconds % 60 < 10 {
-                timerLabel.stringValue = "0\(Int(seconds / 60)):0\(seconds % 60)"
-            } else {
-                timerLabel.stringValue = "0\(Int(seconds / 60)):\(seconds % 60)"
-            }
-        }
-    }
+   
     
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
         
         self.draw()
-    }
-    
-    public func startTimer() {
-        self.editingTime = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { [weak self] _ in
-            self?.seconds -= 1
-            if self?.seconds == 0 {
-                self?.editingTime?.invalidate()
-                self?.editingTime = nil
-            }
-        })
     }
     
     private func draw() {

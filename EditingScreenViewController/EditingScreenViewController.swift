@@ -26,27 +26,18 @@ class EditingScreenViewController: NSViewController, NSCollectionViewDataSource,
     
     override func viewDidAppear() {
         super.viewDidAppear()
-        self.rootView.startTimer()
     }
     
     //MARK:
     //MARK: - Actions
     
     @IBAction func playAction(_ sender: NSButton) {
-//        let enemyShips = self.shipsBuilder.createShips().compactMap { ship in
-//            ShipModel(decks: ship)
-//        }
-//        let myShips = self.createMyShips().compactMap { ship in
-//            ShipModel(decks: ship)
-//        }
-//
-//        self.view.window?.contentViewController = GameProcessScreenViewController.createController(myShips: myShips, enemyShips: enemyShips)
-//    }
-        let enemyShips = self.shipsBuilder.createShips()
         let myShips = self.createMyShips()
-        
-        self.view.window?.contentViewController = GameProcessScreenViewController.createController(myShips: myShips, enemyShips: enemyShips)
+        if self.check(ships: myShips) {
+            let enemyShips = self.shipsBuilder.createShips()
+            self.view.window?.contentViewController = GameProcessScreenViewController.createController(myShips: myShips, enemyShips: enemyShips)
         }
+    }
     
     @IBAction func clearAction(_ sender: Any) {
         self.lockedPoints = []
@@ -146,7 +137,7 @@ class EditingScreenViewController: NSViewController, NSCollectionViewDataSource,
     
     private func searchVerticalShip(startIndex: Int, array: inout [[IndexPath]], currentShip: inout [IndexPath]) {
         var j = 0
-        for i in (startIndex...3) {
+        for i in (startIndex...9) {
             if !array.isEmpty,
                let section = array.object(at: i+j),
                let point = currentShip.last,
@@ -166,6 +157,23 @@ class EditingScreenViewController: NSViewController, NSCollectionViewDataSource,
         }
     }
     
+    private func check(ships: [[IndexPath]]) -> Bool {
+        if ships.count != 10 {
+            NSAlert.showAlert(title: "Увага!", message: "Невірна кількість кораблів") { _ in }
+            return false
+        }
+        for i in (1...4) {
+            if ships.filter({ ship in
+                ship.count == (5 - i)
+            }).count != i {
+                NSAlert.showAlert(title: "Увага!", message: "Невірні кораблі") { _ in }
+                return false
+            }
+        }
+        
+        return true
+    }
+                               
     private func didSelectModel(at indexPath: IndexPath) -> CellModel.CellType {
         var model = self.cellModels[indexPath.section][indexPath.item]
         if model.type == .empty {
