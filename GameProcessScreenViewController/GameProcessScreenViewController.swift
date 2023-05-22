@@ -1,5 +1,10 @@
 import Cocoa
 
+struct SelectModelResult {
+    let safeZone: [IndexPath]
+    let shot: Bool
+}
+
 class GameProcessScreenViewController: NSViewController, NSCollectionViewDataSource, NSCollectionViewDelegate {
     
     var rootView: GameProcessScreenView {
@@ -14,6 +19,8 @@ class GameProcessScreenViewController: NSViewController, NSCollectionViewDataSou
     private var enemyShipsDictionary: [Int : [IndexPath]] = [:]
     
     private var enemyBoard = BoardGenerator.generate
+    private var possiblePoints: [IndexPath] = []
+    private var partialShip: [IndexPath] = []
     
     static func createController(myShips: [[IndexPath]], enemyShips: [[IndexPath]]) -> NSViewController? {
         let storyBoard = NSStoryboard(name: "Main", bundle: nil)
@@ -71,18 +78,20 @@ class GameProcessScreenViewController: NSViewController, NSCollectionViewDataSou
     
     private func selectModel(at indexPath: IndexPath) {
         guard self.enemyCellModels[indexPath.section][indexPath.item].type == .empty else { return }
-        let safeZone = self.selectModel(
+        let model = self.selectModel(
             at: indexPath,
             shipsArray: self.enemyShipsArray,
             cellModels: &self.enemyCellModels,
             shipsDictionary: &self.enemyShipsDictionary)
         
-        safeZone.forEach { point in
+        model.safeZone.forEach { point in
             self.enemyCellModels[point.section][point.item].type = .miss
         }
         self.rootView.enemyCollection.reloadData()
-        if !self.checkShips() {
-            self.enemyActions()
+        if !self.checkEnemyShips(), !model.shot {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+                self?.enemyActions()
+            }
         }
     }
     
@@ -91,10 +100,11 @@ class GameProcessScreenViewController: NSViewController, NSCollectionViewDataSou
         shipsArray: [[IndexPath]],
         cellModels: inout [[CellModel]],
         shipsDictionary: inout [Int : [IndexPath]]
-    ) -> [IndexPath]
+    ) -> SelectModelResult
     {
         var model = cellModels[indexPath.section][indexPath.item]
         var safeZone: [IndexPath] = []
+        var shot = false
         model.type = .miss
         shipsArray.enumerated().forEach { (i, ship) in
             if ship.contains(indexPath) {
@@ -104,6 +114,7 @@ class GameProcessScreenViewController: NSViewController, NSCollectionViewDataSou
                     shipsDictionary[i]?.append(indexPath)
                 }
                 model.type = .full(.damaged)
+                shot = true
                 if shipsDictionary[i]?.count == shipsArray[i].count {
                     model.type = .full(.destroyed)
                     shipsDictionary[i]?.forEach { point in
@@ -115,32 +126,83 @@ class GameProcessScreenViewController: NSViewController, NSCollectionViewDataSou
                             safeZone = SafeZoneBuilder.createSafeZone(around: ship, state: .horisontal)
                         }
                     }
-                    
                 }
             }
         }
         cellModels[indexPath.section][indexPath.item] = model
         
-        return safeZone
+        return SelectModelResult(safeZone: safeZone, shot: shot)
     }
     
     private func enemyActions() {
-        guard let point = self.enemyBoard.randomElement() else { return }
+        self.rootView.enemyCollection.isSelectable = false
+        var somePoint: IndexPath?
+        if self.possiblePoints.isEmpty {
+            somePoint = self.enemyBoard.randomElement()
+        } else {
+            somePoint = self.possiblePoints.randomElement()
+        }
+        guard let point = somePoint else { return }
+        
         self.enemyBoard.remove(object: point)
-        let safeZone = self.selectModel(
+        self.possiblePoints.remove(object: point)
+        let model = self.selectModel(
             at: point,
             shipsArray: self.myShipsArray,
             cellModels: &self.myCellModels,
             shipsDictionary: &self.myShipsDictionary)
-        safeZone.forEach { point in
+        model.safeZone.forEach { point in
             self.enemyBoard.remove(object: point)
         }
         self.rootView.myCollection.reloadData()
-        _ = self.checkShips()
+        if !self.checkMyShips() {
+            if model.shot {
+                self.partialShip.append(point)
+                self.partialShip.sort { previous, next in
+                    previous.item < next.item || previous.section < next.section
+                }
+                if !model.safeZone.isEmpty {
+                    self.partialShip.removeAll()
+                    self.possiblePoints.removeAll()
+                }
+                self.generatePossiblePoints()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+                    self?.enemyActions()
+                }
+            } else {
+                self.rootView.enemyCollection.isSelectable = true
+            }
+        }
     }
     
-    private func checkShips() -> Bool {
-        var ships = self.myShipsDictionary.compactMap { $1 }
+    private func generatePossiblePoints() {
+        if let first = self.partialShip.first,
+           let last = self.partialShip.last
+        {
+            if first == last {
+                if self.possiblePoints.isEmpty {
+                    self.possiblePoints = first.perpendicular.filter { indexPath in
+                        self.enemyBoard.contains(indexPath)
+                    }
+                }
+            } else {
+                if first.item < last.item {
+                    self.possiblePoints = [first.add(item: -1), last.add(item: 1)].filter(startIndex: 0, endIndex: 9)
+                } else if first.section < last.section {
+                    self.possiblePoints = [first.add(section: -1), last.add(section: 1)].filter(startIndex: 0, endIndex: 9)
+                }
+            }
+        }
+    }
+    
+    
+    
+    private func searchShip() {
+        
+    }
+    
+    private func checkMyShips() -> Bool {
+        let ships = self.myShipsDictionary.compactMap { $1 }
         if self.check(ships: ships) {
             NSAlert.showAlert(title: "На жаль!", message: "Ви програли!") { [weak self] value in
                 self?.presentStartFlow()
@@ -149,7 +211,11 @@ class GameProcessScreenViewController: NSViewController, NSCollectionViewDataSou
             return true
         }
         
-        ships = self.enemyShipsDictionary.compactMap { $1 }
+        return false
+    }
+    
+    private func checkEnemyShips() -> Bool {
+        let ships = self.enemyShipsDictionary.compactMap { $1 }
         if self.check(ships: ships) {
             NSAlert.showAlert(title: "Вітаннячка!", message: "Ви перемогли!") { [weak self] value in
                 self?.presentStartFlow()
